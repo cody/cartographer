@@ -35,23 +35,23 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setAllToDifferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setAllToOldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setAllToNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contentsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.setAllToDifferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.setAllToOldToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.setAllToNewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxRegex = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.textBoxLog = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -115,6 +115,24 @@
             this.editToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.editToolStripMenuItem.Text = "&View";
             // 
+            // setAllToDifferenceToolStripMenuItem
+            // 
+            this.setAllToDifferenceToolStripMenuItem.Name = "setAllToDifferenceToolStripMenuItem";
+            this.setAllToDifferenceToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.setAllToDifferenceToolStripMenuItem.Text = "Set all to difference";
+            // 
+            // setAllToOldToolStripMenuItem
+            // 
+            this.setAllToOldToolStripMenuItem.Name = "setAllToOldToolStripMenuItem";
+            this.setAllToOldToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.setAllToOldToolStripMenuItem.Text = "Set all to old";
+            // 
+            // setAllToNewToolStripMenuItem
+            // 
+            this.setAllToNewToolStripMenuItem.Name = "setAllToNewToolStripMenuItem";
+            this.setAllToNewToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.setAllToNewToolStripMenuItem.Text = "Set all to new";
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -159,24 +177,6 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(333, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
             // 
-            // setAllToDifferenceToolStripMenuItem
-            // 
-            this.setAllToDifferenceToolStripMenuItem.Name = "setAllToDifferenceToolStripMenuItem";
-            this.setAllToDifferenceToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.setAllToDifferenceToolStripMenuItem.Text = "Set all to difference";
-            // 
-            // setAllToOldToolStripMenuItem
-            // 
-            this.setAllToOldToolStripMenuItem.Name = "setAllToOldToolStripMenuItem";
-            this.setAllToOldToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.setAllToOldToolStripMenuItem.Text = "Set all to old";
-            // 
-            // setAllToNewToolStripMenuItem
-            // 
-            this.setAllToNewToolStripMenuItem.Name = "setAllToNewToolStripMenuItem";
-            this.setAllToNewToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.setAllToNewToolStripMenuItem.Text = "Set all to new";
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -186,14 +186,14 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Regex for map names:";
             // 
-            // textBox1
+            // textBoxRegex
             // 
-            this.textBox1.Location = new System.Drawing.Point(380, 8);
-            this.textBox1.MaxLength = 1000;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(144, 20);
-            this.textBox1.TabIndex = 2;
-            this.textBox1.Text = "001-";
+            this.textBoxRegex.Location = new System.Drawing.Point(380, 8);
+            this.textBoxRegex.MaxLength = 1000;
+            this.textBoxRegex.Name = "textBoxRegex";
+            this.textBoxRegex.Size = new System.Drawing.Size(144, 20);
+            this.textBoxRegex.TabIndex = 2;
+            this.textBoxRegex.Text = "001-";
             // 
             // button1
             // 
@@ -224,7 +224,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.textBox2);
+            this.tabPage1.Controls.Add(this.textBoxLog);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -232,6 +232,20 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Log";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // textBoxLog
+            // 
+            this.textBoxLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxLog.Location = new System.Drawing.Point(3, 3);
+            this.textBoxLog.Multiline = true;
+            this.textBoxLog.Name = "textBoxLog";
+            this.textBoxLog.ReadOnly = true;
+            this.textBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxLog.Size = new System.Drawing.Size(562, 694);
+            this.textBoxLog.TabIndex = 0;
+            this.textBoxLog.TabStop = false;
+            this.textBoxLog.WordWrap = false;
             // 
             // tabPage2
             // 
@@ -243,20 +257,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Minimaps";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // textBox2
-            // 
-            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox2.Location = new System.Drawing.Point(3, 3);
-            this.textBox2.Multiline = true;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox2.Size = new System.Drawing.Size(562, 694);
-            this.textBox2.TabIndex = 0;
-            this.textBox2.TabStop = false;
-            this.textBox2.WordWrap = false;
             // 
             // tableLayoutPanel1
             // 
@@ -279,7 +279,7 @@
             this.ClientSize = new System.Drawing.Size(584, 762);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.textBoxRegex);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -316,14 +316,14 @@
         private System.Windows.Forms.ToolStripMenuItem contentsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxRegex;
         private System.Windows.Forms.Button button1;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TextBox textBox2;
         public System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TextBox textBoxLog;
     }
 }
 

@@ -7,6 +7,7 @@ namespace cartographer
         public Form1()
         {
             InitializeComponent();
+            Logger.init(textBoxLog);
         }
     }
 }
