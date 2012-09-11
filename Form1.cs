@@ -9,5 +9,17 @@ namespace cartographer
             InitializeComponent();
             Logger.init(textBoxLog);
         }
+
+        private void aboutMenu_Click(object sender, System.EventArgs e)
+        {
+            AboutForm a = new AboutForm();
+            a.ShowDialog();
+            a.Dispose();
+        }
+
+        private void helpRegexMenu_Click(object sender, System.EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://msdn.microsoft.com/en-us/library/az24scfc.aspx");
+        }
     }
 }

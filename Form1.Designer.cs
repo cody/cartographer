@@ -170,12 +170,14 @@
             this.contentsToolStripMenuItem.Name = "contentsToolStripMenuItem";
             this.contentsToolStripMenuItem.Size = new System.Drawing.Size(333, 22);
             this.contentsToolStripMenuItem.Text = "Regular Expression Language - Quick Reference...";
+            this.contentsToolStripMenuItem.Click += new System.EventHandler(this.helpRegexMenu_Click);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(333, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutMenu_Click);
             // 
             // label1
             // 
