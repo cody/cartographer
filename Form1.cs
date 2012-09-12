@@ -15,16 +15,35 @@ namespace cartographer
             Close();
         }
 
-        private void aboutMenu_Click(object sender, System.EventArgs e)
+        private void optionMenu_Click(object sender, System.EventArgs e)
         {
-            AboutForm a = new AboutForm();
-            a.ShowDialog();
-            a.Dispose();
+            ToolStripMenuItem choice = (ToolStripMenuItem)sender;
+
+            if (choice.CheckState == CheckState.Checked)
+                return;
+
+            if (sender == showChangedMapsOnlyMenu)
+            {
+                showChangedMapsOnlyMenu.CheckState = CheckState.Checked;
+                showAllMapsMenu.CheckState = CheckState.Unchecked;
+            }
+            else
+            {
+                showChangedMapsOnlyMenu.CheckState = CheckState.Unchecked;
+                showAllMapsMenu.CheckState = CheckState.Checked;
+            }
         }
 
         private void helpRegexMenu_Click(object sender, System.EventArgs e)
         {
             System.Diagnostics.Process.Start("http://msdn.microsoft.com/en-us/library/az24scfc.aspx");
+        }
+
+        private void aboutMenu_Click(object sender, System.EventArgs e)
+        {
+            AboutForm a = new AboutForm();
+            a.ShowDialog();
+            a.Dispose();
         }
     }
 }

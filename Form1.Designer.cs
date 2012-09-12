@@ -150,12 +150,14 @@
             this.showChangedMapsOnlyMenu.Name = "showChangedMapsOnlyMenu";
             this.showChangedMapsOnlyMenu.Size = new System.Drawing.Size(210, 22);
             this.showChangedMapsOnlyMenu.Text = "Show changed maps only";
+            this.showChangedMapsOnlyMenu.Click += new System.EventHandler(this.optionMenu_Click);
             // 
             // showAllMapsMenu
             // 
             this.showAllMapsMenu.Name = "showAllMapsMenu";
             this.showAllMapsMenu.Size = new System.Drawing.Size(210, 22);
             this.showAllMapsMenu.Text = "Show all maps";
+            this.showAllMapsMenu.Click += new System.EventHandler(this.optionMenu_Click);
             // 
             // helpToolStripMenu
             // 
@@ -177,7 +179,7 @@
             // 
             this.aboutMenu.Name = "aboutMenu";
             this.aboutMenu.Size = new System.Drawing.Size(333, 22);
-            this.aboutMenu.Text = "&About...";
+            this.aboutMenu.Text = "About...";
             this.aboutMenu.Click += new System.EventHandler(this.aboutMenu_Click);
             // 
             // label1
