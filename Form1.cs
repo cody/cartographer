@@ -10,6 +10,11 @@ namespace cartographer
             Logger.init(textBoxLog);
         }
 
+        private void quitMenu_Click(object sender, System.EventArgs e)
+        {
+            Close();
+        }
+
         private void aboutMenu_Click(object sender, System.EventArgs e)
         {
             AboutForm a = new AboutForm();
