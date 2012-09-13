@@ -37,7 +37,13 @@ namespace cartographer
                 Logger.error("Too many command line arguments.");
         }
 
-        private void runButton_Click(object sender, System.EventArgs e)
+        private void textBoxRegex_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\r' )
+                runButton_Click();
+        }
+
+        private void runButton_Click(object sender = null, System.EventArgs e = null)
         {
             if (!Repo.knowsRepo)
             {
@@ -62,6 +68,7 @@ namespace cartographer
             runButton.Enabled = false;
             Logger.clear();
             tabControl.SelectedIndex = 0;
+            textBoxRegex.Text = textBoxRegex.Text.Trim();
             tableLayoutPanel.Controls.Clear();
             backgroundWorker.RunWorkerAsync(textBoxRegex.Text);
         }
@@ -119,6 +126,9 @@ namespace cartographer
             DateTime startTime = DateTime.Now;
             Logger.bw.ReportProgress(0, "Path to maps: " + Repo.pathMaps);
             Logger.bw.ReportProgress(0, "Path to minimaps: " + Repo.pathMinimaps);
+
+            if (!Repo.findRegexMatches((string)e.Argument))
+                return;
 
             TimeSpan timeSpan = DateTime.Now - startTime;
             string duration = "Time: ";

@@ -19,7 +19,10 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace cartographer
@@ -29,6 +32,7 @@ namespace cartographer
         public static bool knowsRepo = false;
         static public string pathMaps = "";
         static public string pathMinimaps = "";
+        static public Dictionary<string, string> regexMatches = new Dictionary<string, string>();
 
         internal static bool readPathXml(string path)
         {
@@ -62,6 +66,34 @@ namespace cartographer
             }
 
             knowsRepo = true;
+            return true;
+        }
+
+        internal static bool findRegexMatches(string regexString)
+        {
+            Regex regex;
+            Logger.bw.ReportProgress(0, "Regex: " + regexString);
+            try
+            {
+                regex = new Regex(regexString);
+            }
+            catch (Exception ex)
+            {
+                Logger.bw.ReportProgress(1, "Problem with regex: " + ex.Message);
+                return false;
+            }
+
+            var mapDirInfo = new DirectoryInfo(pathMaps);
+            var mapNames = mapDirInfo.EnumerateFiles("*.tmx");
+            Logger.bw.ReportProgress(0, "Total number of maps: " + mapNames.Count());
+            regexMatches.Clear();
+            foreach (FileInfo f in mapNames)
+            {
+                string name = f.Name.Substring(0, f.Name.Length - 4);
+                if (regex.IsMatch(name))
+                    regexMatches.Add(name, f.FullName);
+            }
+            Logger.bw.ReportProgress(0, "Number of maps matched by regex: " + regexMatches.Count);
             return true;
         }
     }
