@@ -18,20 +18,16 @@
  */
 #endregion
 
-using System;
-using System.Reflection;
-using System.Windows.Forms;
-
 namespace cartographer
 {
-    public partial class AboutForm : Form
+    static class Repo
     {
-        public AboutForm()
-        {
-            InitializeComponent();
+        public static bool knowsRepo { get; private set; }
 
-            var version = Assembly.GetExecutingAssembly().GetName().Version;
-            labelVersion.Text = String.Format("Version: {0}.{1}", version.Major, version.Minor);
+        internal static bool readPathXml(string path)
+        {
+            Logger.log("Path to repo: " + path);
+            return false;
         }
     }
 }
