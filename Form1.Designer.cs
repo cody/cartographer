@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.runMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAllMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.quitMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,14 +46,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxRegex = new System.Windows.Forms.TextBox();
             this.runButton = new System.Windows.Forms.Button();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
+            this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.textBoxLog = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.menuStrip1.SuspendLayout();
-            this.tabControl1.SuspendLayout();
+            this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.SuspendLayout();
@@ -75,20 +74,11 @@
             // fileToolStripMenu
             // 
             this.fileToolStripMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.runMenu,
             this.saveAllMenu,
             this.quitMenu});
             this.fileToolStripMenu.Name = "fileToolStripMenu";
             this.fileToolStripMenu.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenu.Text = "&File";
-            // 
-            // runMenu
-            // 
-            this.runMenu.Image = ((System.Drawing.Image)(resources.GetObject("runMenu.Image")));
-            this.runMenu.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.runMenu.Name = "runMenu";
-            this.runMenu.Size = new System.Drawing.Size(210, 22);
-            this.runMenu.Text = "Run";
             // 
             // saveAllMenu
             // 
@@ -210,23 +200,26 @@
             this.runButton.UseVisualStyleBackColor = true;
             this.runButton.Click += new System.EventHandler(this.runButton_Click);
             // 
-            // backgroundWorker1
+            // backgroundWorker
             // 
-            this.backgroundWorker1.WorkerReportsProgress = true;
+            this.backgroundWorker.WorkerReportsProgress = true;
+            this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_DoWork);
+            this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker_ProgressChanged);
+            this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
             // 
-            // tabControl1
+            // tabControl
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(5, 32);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(576, 726);
-            this.tabControl1.TabIndex = 4;
-            this.tabControl1.TabStop = false;
+            this.tabControl.Controls.Add(this.tabPage1);
+            this.tabControl.Controls.Add(this.tabPage2);
+            this.tabControl.Location = new System.Drawing.Point(5, 32);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(576, 726);
+            this.tabControl.TabIndex = 4;
+            this.tabControl.TabStop = false;
             // 
             // tabPage1
             // 
@@ -255,7 +248,7 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.tableLayoutPanel1);
+            this.tabPage2.Controls.Add(this.tableLayoutPanel);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -264,19 +257,19 @@
             this.tabPage2.Text = "Minimaps";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // tableLayoutPanel1
+            // tableLayoutPanel
             // 
-            this.tableLayoutPanel1.AutoScroll = true;
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(562, 694);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.tableLayoutPanel.AutoScroll = true;
+            this.tableLayoutPanel.ColumnCount = 2;
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel.Name = "tableLayoutPanel";
+            this.tableLayoutPanel.RowCount = 1;
+            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel.Size = new System.Drawing.Size(562, 694);
+            this.tableLayoutPanel.TabIndex = 0;
             // 
             // Form1
             // 
@@ -284,7 +277,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 762);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.tabControl);
             this.Controls.Add(this.runButton);
             this.Controls.Add(this.textBoxRegex);
             this.Controls.Add(this.label1);
@@ -298,7 +291,7 @@
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form1_DragEnter);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
+            this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
@@ -311,7 +304,6 @@
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenu;
-        private System.Windows.Forms.ToolStripMenuItem runMenu;
         private System.Windows.Forms.ToolStripMenuItem saveAllMenu;
         private System.Windows.Forms.ToolStripMenuItem quitMenu;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenu;
@@ -327,11 +319,11 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxRegex;
         private System.Windows.Forms.Button runButton;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.ComponentModel.BackgroundWorker backgroundWorker;
+        private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        public System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        public System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.TextBox textBoxLog;
     }
 }

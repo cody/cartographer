@@ -18,6 +18,8 @@
  */
 #endregion
 
+using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace cartographer
@@ -27,7 +29,7 @@ namespace cartographer
         public Form1(string[] args)
         {
             InitializeComponent();
-            Logger.init(textBoxLog);
+            Logger.init(textBoxLog, backgroundWorker);
 
             if (args.Length == 1)
                 Repo.readPathXml(args[0]);
@@ -58,6 +60,10 @@ namespace cartographer
             }
 
             runButton.Enabled = false;
+            Logger.clear();
+            tabControl.SelectedIndex = 0;
+            tableLayoutPanel.Controls.Clear();
+            backgroundWorker.RunWorkerAsync(textBoxRegex.Text);
         }
 
         private void quitMenu_Click(object sender, System.EventArgs e)
@@ -106,6 +112,47 @@ namespace cartographer
         {
             string[] data = (string[]) e.Data.GetData(DataFormats.FileDrop);
             Repo.readPathXml(data[0]);
+        }
+
+        private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            DateTime startTime = DateTime.Now;
+            Logger.bw.ReportProgress(0, "Path to maps: " + Repo.pathMaps);
+            Logger.bw.ReportProgress(0, "Path to minimaps: " + Repo.pathMinimaps);
+
+            TimeSpan timeSpan = DateTime.Now - startTime;
+            string duration = "Time: ";
+            if (timeSpan.TotalMinutes >= 1)
+                duration += (int)timeSpan.TotalMinutes + " minutes ";
+            duration += timeSpan.Seconds + " seconds";
+            Logger.bw.ReportProgress(0, duration);
+            Logger.bw.ReportProgress(2, "");
+        }
+
+        private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            switch(e.ProgressPercentage)
+            {
+                case 0: Logger.log((string)e.UserState); break;
+                case 1: Logger.error((string)e.UserState); break;
+                case 2: Logger.reportErrors(); break;
+            }
+        }
+
+        private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                Logger.error("Unhandled error in backgroundworker. " + e.Error.Message);
+                return;
+            }
+            else if (e.Cancelled)
+            {
+                Logger.error("Backgroundworker cancelled.");
+                return;
+            }
+
+            runButton.Enabled = true;
         }
     }
 }

@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace cartographer
@@ -27,10 +28,12 @@ namespace cartographer
     {
         private static TextBox textBox;
         private static int errorCounter;
+        public static BackgroundWorker bw { get; private set; }
 
-        public static void init(TextBox tb)
+        public static void init(TextBox tb, BackgroundWorker worker)
         {
             textBox = tb;
+            bw = worker;
         }
 
         public static void error(string s)

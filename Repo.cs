@@ -27,8 +27,8 @@ namespace cartographer
     static class Repo
     {
         public static bool knowsRepo = false;
-        static string pathMaps = "";
-        static string pathMinimaps = "";
+        static public string pathMaps = "";
+        static public string pathMinimaps = "";
 
         internal static bool readPathXml(string path)
         {
