@@ -200,10 +200,10 @@
             this.textBoxRegex.TabIndex = 2;
             this.textBoxRegex.Text = "001-";
             // 
-            // button1
+            // runButton
             // 
             this.runButton.Location = new System.Drawing.Point(530, 6);
-            this.runButton.Name = "button1";
+            this.runButton.Name = "runButton";
             this.runButton.Size = new System.Drawing.Size(47, 23);
             this.runButton.TabIndex = 3;
             this.runButton.Text = "Run";
@@ -280,6 +280,7 @@
             // 
             // Form1
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(584, 762);
@@ -293,6 +294,8 @@
             this.MinimumSize = new System.Drawing.Size(600, 200);
             this.Name = "Form1";
             this.Text = "Cartographer";
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form1_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form1_DragEnter);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);

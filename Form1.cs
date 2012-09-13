@@ -95,5 +95,17 @@ namespace cartographer
             a.ShowDialog();
             a.Dispose();
         }
+
+        private void Form1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (!Repo.knowsRepo && e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
+        }
+
+        private void Form1_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] data = (string[]) e.Data.GetData(DataFormats.FileDrop);
+            Repo.readPathXml(data[0]);
+        }
     }
 }
