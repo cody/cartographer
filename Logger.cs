@@ -27,7 +27,7 @@ namespace cartographer
     public static class Logger
     {
         private static TextBox textBox;
-        private static int errorCounter;
+        public static int errorCounter { get; private set;  }
         public static BackgroundWorker bw { get; private set; }
 
         public static void init(TextBox tb, BackgroundWorker worker)

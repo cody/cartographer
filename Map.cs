@@ -43,7 +43,7 @@ namespace cartographer
         public SortedList<uint, Tileset> tilesetList = new SortedList<uint, Tileset>();
         public Bitmap minimap { get; private set; }
         public Bitmap oldMinimap { get; private set; }
-        public Bitmap diffMinimap { get; private set; }
+        public Bitmap diffMinimap { get; set; }
         public string diffText { get; set; }
         public bool isDifferent = false;
         Node root = new Node();

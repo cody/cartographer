@@ -39,7 +39,7 @@ namespace cartographer
 
         private void textBoxRegex_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == '\r' )
+            if (e.KeyChar == '\r' && runButton.Enabled == true)
                 runButton_Click();
         }
 
@@ -187,6 +187,31 @@ namespace cartographer
                 return;
             }
 
+            draw();
+
+            if (Logger.errorCounter == 0)
+                tabControl.SelectedIndex = 1;
+        }
+
+        private void draw()
+        {
+            runButton.Enabled = false;
+            tableLayoutPanel.SuspendLayout();
+
+            foreach (var map in Repo.maps.Values)
+            {
+                if (!Repo.regexMatches.ContainsKey(map.name))
+                    continue;
+
+                if (!map.isDifferent && showChangedMapsOnlyMenu.CheckState == CheckState.Checked)
+                    continue;
+
+                var group = new MyGroupBox(map);
+                tableLayoutPanel.Controls.Add(group);
+                tableLayoutPanel.Controls.Add(group.picbox);
+            }
+
+            tableLayoutPanel.ResumeLayout();
             runButton.Enabled = true;
         }
     }
