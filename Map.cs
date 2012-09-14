@@ -149,12 +149,12 @@ namespace cartographer
                         }
                     }
                 }
-                if (!isDifferent && diffMinimap != null)
-                {
-                    diffText = "No changes.";
-                    diffMinimap.Dispose();
-                    diffMinimap = null;
-                }
+            }
+            if (!isDifferent && diffMinimap != null)
+            {
+                diffText = "No changes.";
+                diffMinimap.Dispose();
+                diffMinimap = null;
             }
         }
     }

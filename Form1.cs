@@ -151,6 +151,16 @@ namespace cartographer
                 duration += (int)timeSpan.TotalMinutes + " minutes ";
             duration += timeSpan.Seconds + " seconds";
             Logger.bw.ReportProgress(0, duration);
+
+            int diffCounter = 0;
+            foreach (var f in Repo.regexMatches)
+            {
+                Map map;
+                if (Repo.maps.TryGetValue(f.Key, out map) && map.isDifferent)
+                    diffCounter++;
+            }
+            Logger.bw.ReportProgress(0, "Number of changed maps: " + diffCounter);
+
             Logger.bw.ReportProgress(2, "");
         }
 
