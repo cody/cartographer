@@ -130,6 +130,21 @@ namespace cartographer
             if (!Repo.findRegexMatches((string)e.Argument))
                 return;
 
+            int counter = 0;
+            foreach (var m in Repo.regexMatches)
+            {
+                Logger.bw.ReportProgress(0, "[" + ++counter + " of " + Repo.regexMatches.Count + "] " + m.Value);
+                if (!Repo.maps.ContainsKey(m.Key))
+                {
+                    Map map = Repo.readTmx(m.Value);
+                    if (map == null)
+                        continue;
+                    map.name = m.Key;
+                    map.render();
+                    Repo.maps.Add(m.Key, map);
+                }
+            }
+
             TimeSpan timeSpan = DateTime.Now - startTime;
             string duration = "Time: ";
             if (timeSpan.TotalMinutes >= 1)
