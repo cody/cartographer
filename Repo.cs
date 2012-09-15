@@ -35,7 +35,7 @@ namespace cartographer
         static public string pathMaps = "";
         static public string pathMinimaps = "";
         static public Dictionary<string, string> regexMatches = new Dictionary<string, string>();
-        static public Dictionary<string, Map> maps = new Dictionary<string, Map>();
+        static public SortedDictionary<string, Map> maps = new SortedDictionary<string, Map>();
         static Dictionary<string, Tileset> tilesets = new Dictionary<string, Tileset>();
 
         internal static bool readPathXml(string path)

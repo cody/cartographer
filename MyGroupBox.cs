@@ -27,11 +27,12 @@ namespace cartographer
 {
     class MyGroupBox : GroupBox
     {
-        private Map map;
+        public Map map;
         public Label picbox = new Label();
-        RadioButton radioDiff = new RadioButton();
-        RadioButton radioOld = new RadioButton();
-        RadioButton radioNew = new RadioButton();
+        public RadioButton radioDiff = new RadioButton();
+        public RadioButton radioOld = new RadioButton();
+        public RadioButton radioNew = new RadioButton();
+        public Button saveButton = new Button();
 
         public MyGroupBox(Map m)
         {
@@ -56,25 +57,18 @@ namespace cartographer
 
             if (map.isDifferent)
             {
-                Button save = new Button();
-                save.Text = "Save";
-                save.Location = new System.Drawing.Point(8, 78);
-                save.Click += buttonSave_Click;
-                Controls.Add(save);
+                saveButton.Text = "Save";
+                saveButton.Location = new System.Drawing.Point(8, 78);
+                saveButton.Click += buttonSave_Click;
+                Controls.Add(saveButton);
             }
 
             picbox.MinimumSize = new Size(map.minimap.Width, map.minimap.Height);
             picbox.AutoSize = true;
             if (map.diffMinimap == null)
-            {
                 picbox.Text = map.diffText;
-                picbox.Image = null;
-            }
             else
-            {
-                picbox.Text = "";
                 picbox.Image = map.diffMinimap;
-            }
         }
 
         void radioButton_CheckedChanged(object sender, EventArgs e)
@@ -100,16 +94,17 @@ namespace cartographer
             }
         }
 
-        void buttonSave_Click(object sender, EventArgs e)
+        public void buttonSave_Click(object sender, EventArgs e)
         {
             Button button = (Button)sender;
             if (!button.Enabled)
                 return;
 
             button.Enabled = false;
+            button.Visible = false;
             map.isDifferent = false;
             map.diffText = "Saved.";
-            if (radioDiff.Checked)
+            if (radioDiff.Checked || radioOld.Checked)
             {
                 picbox.Image = null;
                 picbox.Text = map.diffText;
@@ -121,11 +116,17 @@ namespace cartographer
                 map.diffMinimap = null;
             }
 
+            if (map.oldMinimap != null)
+            {
+                map.oldMinimap.Dispose();
+                map.oldMinimap = null;
+            }
+
             try
             {
                 map.minimap.Save(Path.Combine(Repo.pathMinimaps, map.name) + ".png");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 map.isDifferent = true;
                 Logger.error("Can't save map. " + ex.Message);

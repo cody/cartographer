@@ -87,6 +87,7 @@
             this.saveAllMenu.Name = "saveAllMenu";
             this.saveAllMenu.Size = new System.Drawing.Size(210, 22);
             this.saveAllMenu.Text = "Save all changes to repo...";
+            this.saveAllMenu.Click += new System.EventHandler(this.saveAllMenu_Click);
             // 
             // quitMenu
             // 
@@ -111,18 +112,21 @@
             this.setAllToDifferenceMenu.Name = "setAllToDifferenceMenu";
             this.setAllToDifferenceMenu.Size = new System.Drawing.Size(175, 22);
             this.setAllToDifferenceMenu.Text = "Set all to difference";
+            this.setAllToDifferenceMenu.Click += new System.EventHandler(this.viewMenu_Click);
             // 
             // setAllToOldMenu
             // 
             this.setAllToOldMenu.Name = "setAllToOldMenu";
             this.setAllToOldMenu.Size = new System.Drawing.Size(175, 22);
             this.setAllToOldMenu.Text = "Set all to old";
+            this.setAllToOldMenu.Click += new System.EventHandler(this.viewMenu_Click);
             // 
             // setAllToNewMenu
             // 
             this.setAllToNewMenu.Name = "setAllToNewMenu";
             this.setAllToNewMenu.Size = new System.Drawing.Size(175, 22);
             this.setAllToNewMenu.Text = "Set all to new";
+            this.setAllToNewMenu.Click += new System.EventHandler(this.viewMenu_Click);
             // 
             // optionsToolStripMenu
             // 
@@ -261,6 +265,8 @@
             // tableLayoutPanel
             // 
             this.tableLayoutPanel.AutoScroll = true;
+            this.tableLayoutPanel.AutoSize = true;
+            this.tableLayoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.tableLayoutPanel.ColumnCount = 2;
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
@@ -296,6 +302,7 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -19,7 +19,9 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace cartographer
@@ -73,9 +75,57 @@ namespace cartographer
             backgroundWorker.RunWorkerAsync(textBoxRegex.Text);
         }
 
+        private void saveAllMenu_Click(object sender, EventArgs e)
+        {
+            var list = new List<MyGroupBox>();
+            SaveDialog dialog = new SaveDialog();
+
+            var iter = tableLayoutPanel.Controls.GetEnumerator();
+            while (iter.MoveNext())
+            {
+                if (iter.Current.GetType() != typeof(MyGroupBox))
+                    continue;
+
+                MyGroupBox box = (MyGroupBox)iter.Current;
+                if (!box.map.isDifferent)
+                    continue;
+
+                list.Add(box);
+                dialog.textBox1.AppendText(box.map.name + Environment.NewLine);
+            }
+
+            var result = dialog.ShowDialog();
+            dialog.Dispose();
+
+            if (result == DialogResult.OK)
+            {
+                foreach (MyGroupBox b in list)
+                    b.buttonSave_Click(b.saveButton, new EventArgs());
+            }
+        }
+
         private void quitMenu_Click(object sender, System.EventArgs e)
         {
             Close();
+        }
+
+        private void viewMenu_Click(object sender, EventArgs e)
+        {
+            var iter = tableLayoutPanel.Controls.GetEnumerator();
+            while (iter.MoveNext())
+            {
+                if (iter.Current.GetType() != typeof(MyGroupBox))
+                    continue;
+
+                MyGroupBox box = (MyGroupBox)iter.Current;
+                ToolStripMenuItem choice = (ToolStripMenuItem)sender;
+                if (sender == setAllToDifferenceMenu)
+                    box.radioDiff.Checked = true;
+                else if (sender == setAllToOldMenu)
+                    box.radioOld.Checked = true;
+                else if (sender == setAllToNewMenu)
+                    box.radioNew.Checked = true;
+            }
         }
 
         private void optionMenu_Click(object sender, System.EventArgs e)
@@ -95,6 +145,8 @@ namespace cartographer
                 showChangedMapsOnlyMenu.CheckState = CheckState.Unchecked;
                 showAllMapsMenu.CheckState = CheckState.Checked;
             }
+
+            draw();
         }
 
         private void helpRegexMenu_Click(object sender, System.EventArgs e)
@@ -195,8 +247,14 @@ namespace cartographer
 
         private void draw()
         {
+            if (backgroundWorker.IsBusy)
+                return;
+
             runButton.Enabled = false;
             tableLayoutPanel.SuspendLayout();
+            tableLayoutPanel.Controls.Clear();
+            tableLayoutPanel.RowCount = 0;
+            tableLayoutPanel.Size = new Size(0, 0);
 
             foreach (var map in Repo.maps.Values)
             {
