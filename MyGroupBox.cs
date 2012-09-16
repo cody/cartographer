@@ -62,8 +62,11 @@ namespace cartographer
                 saveButton.Click += buttonSave_Click;
                 Controls.Add(saveButton);
             }
-
-            picbox.MinimumSize = new Size(map.minimap.Width, map.minimap.Height);
+            int width = map.oldMinimap == null ? map.minimap.Width
+                                               : Math.Max(map.minimap.Width, map.oldMinimap.Width);
+            int height = map.oldMinimap == null ? map.minimap.Height
+                                                : Math.Max(map.minimap.Height, map.oldMinimap.Height);
+            picbox.MinimumSize = new Size(width, height);
             picbox.AutoSize = true;
             if (map.diffMinimap == null)
                 picbox.Text = map.diffText;

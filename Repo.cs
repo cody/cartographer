@@ -106,9 +106,8 @@ namespace cartographer
             XElement xml;
             int width;
             int height;
-            int tilewidth;
-            int tileheight;
-            string source;
+            int tilewidthOfMap;
+            int tileheightOfMap;
 
             try
             {
@@ -133,15 +132,15 @@ namespace cartographer
 
             try
             {
-                tilewidth = Convert.ToInt32(xml.Attribute("tilewidth").Value);
-                tileheight = Convert.ToInt32(xml.Attribute("tileheight").Value);
+                tilewidthOfMap = Convert.ToInt32(xml.Attribute("tilewidth").Value);
+                tileheightOfMap = Convert.ToInt32(xml.Attribute("tileheight").Value);
             }
             catch (Exception e)
             {
                 Logger.bw.ReportProgress(1, "Can't read tilewidth or tileheight. " + e.Message);
                 return null;
             }
-            if (tilewidth != 32 || tileheight != 32)
+            if (tilewidthOfMap != 32 || tileheightOfMap != 32)
             {
                 Logger.bw.ReportProgress(1, "Tilewidth and tileheight have to be 32x32.");
                 return null;
@@ -153,7 +152,10 @@ namespace cartographer
             {
                 if (child.Name == "tileset")
                 {
+                    Tileset tileset;
                     uint firstgid;
+                    string key;
+
                     try
                     {
                         firstgid = Convert.ToUInt32(child.Attribute("firstgid").Value);
@@ -164,24 +166,47 @@ namespace cartographer
                         return null;
                     }
 
-                    try
+                    var sourceAttribute = child.Attribute("source");
+                    var imageElement = child.Element("image");
+                    if (sourceAttribute != null) // external tileset
                     {
-                        source = child.Attribute("source").Value;
+                        key = sourceAttribute.Value;
+                        if (!tilesets.TryGetValue(key, out tileset))
+                        {
+                            XElement xmlExtern;
+                            string path = Path.Combine(pathMaps, key);
+                            try
+                            {
+                                xmlExtern = XElement.Load(path);
+                            }
+                            catch (Exception e)
+                            {
+                                Logger.bw.ReportProgress(1, "Problem loading tileset " + path + ": " + e.Message);
+                                return null;
+                            }
+                            tileset = readTileset(xmlExtern, Path.GetDirectoryName(path));
+                            if (tileset == null)
+                                return null;
+                            tilesets.Add(key, tileset);
+                        }
                     }
-                    catch (Exception e)
+                    else if (imageElement != null) // internal tileset
                     {
-                        Logger.bw.ReportProgress(1, "Tileset has no \"source\" attribute. " + e.Message);
+                        key = imageElement.Attribute("source").Value;
+                        if (!tilesets.TryGetValue(key, out tileset))
+                        {
+                            tileset = readTileset(child, Repo.pathMaps);
+                            if (tileset == null)
+                                return null;
+                            tilesets.Add(key, tileset);
+                        }
+                    }
+                    else
+                    {
+                        Logger.bw.ReportProgress(1, "Tileset with firstgid " + firstgid + " has neither image nor source.");
                         return null;
                     }
 
-                    Tileset tileset;
-                    if (!tilesets.TryGetValue(source, out tileset))
-                    {
-                        tileset = readTsx(Path.Combine(pathMaps, source));
-                        if (tileset == null)
-                            return null;
-                        tilesets.Add(source, tileset);
-                    }
                     map.tilesetList.Add(firstgid, tileset);
                 }
                 else if (child.Name == "layer")
@@ -253,6 +278,11 @@ namespace cartographer
                                     continue;
                                 var order = map.tilesetList.Last(n => n.Key <= number);
                                 Tile tile = order.Value.tiles[number - order.Key];
+                                if (tile == null)
+                                {
+                                    Logger.bw.ReportProgress(1, "Layer has invalid tile.");
+                                    return null;
+                                }
                                 tile.addToLayer(map.layers, x, y);
                             }
                         }
@@ -267,24 +297,11 @@ namespace cartographer
             return map;
         }
 
-        private static Tileset readTsx(string tsx)
+        private static Tileset readTileset(XElement xml, string partentPath)
         {
-            XElement xml;
-            int width;
-            int height;
             int tilewidth;
             int tileheight;
             string source;
-
-            try
-            {
-                xml = XElement.Load(tsx);
-            }
-            catch (Exception e)
-            {
-                Logger.bw.ReportProgress(1, "Problem loading tileset " + tsx + ": " + e.Message);
-                return null;
-            }
 
             try
             {
@@ -293,7 +310,7 @@ namespace cartographer
             }
             catch (Exception e)
             {
-                Logger.bw.ReportProgress(1, "External tileset " + tsx + " has no \"tilewidth\" or \"tileheight\" attribute. " + e.Message);
+                Logger.bw.ReportProgress(1, "Tileset has no \"tilewidth\" or \"tileheight\" attribute. " + e.Message);
                 return null;
             }
 
@@ -308,45 +325,17 @@ namespace cartographer
                 }
                 catch (Exception e)
                 {
-                    Logger.bw.ReportProgress(1, "External tileset " + tsx + " has no \"source\" attribute. " + e.Message);
+                    Logger.bw.ReportProgress(1, "Tileset has no \"source\" attribute. " + e.Message);
                     return null;
                 }
 
-                Bitmap fullBitmap;
-                try
-                {
-                    fullBitmap = new Bitmap(Path.Combine(Path.GetDirectoryName(tsx), source));
-                }
-                catch (Exception e)
-                {
-                    Logger.bw.ReportProgress(1, "Can't create Bitmap from external tileset " + tsx + ": " + e.Message);
-                    return null;
-                }
+                Tileset tileset = new Tileset(tileWidth: tilewidth, tileHeight: tileheight,
+                                              bitmapPath: Path.Combine(partentPath, source));
 
-                try
-                {
-                    width = Convert.ToInt32(child.Attribute("width").Value);
-                    height = Convert.ToInt32(child.Attribute("height").Value);
-                    if (width > fullBitmap.Width)
-                        width = fullBitmap.Width;
-                    if (height > fullBitmap.Height)
-                        height = fullBitmap.Height;
-                }
-                catch (Exception e)
-                {
-                    Logger.bw.ReportProgress(1, "External tileset " + tsx + " has no \"width\" or \"height\" attribute. " + e.Message);
-                    return null;
-                }
-
-                Tileset tileset = new Tileset(width: width, height: height, tileWidth: tilewidth,
-                                              tileHeight: tileheight, fullBitmap: fullBitmap);
-
-                fullBitmap.Dispose();
-                fullBitmap = null;
                 return tileset;
             }
 
-            Logger.bw.ReportProgress(1, "Tileset has no \"image\": " + tsx);
+            Logger.bw.ReportProgress(1, "Tileset has no \"image\".");
             return null;
         }
     }

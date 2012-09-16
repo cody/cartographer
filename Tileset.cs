@@ -18,6 +18,7 @@
  */
 #endregion
 
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
@@ -28,8 +29,21 @@ namespace cartographer
     {
         public Tile[] tiles { get; private set; }
 
-        public Tileset(int width, int height, int tileWidth, int tileHeight, Bitmap fullBitmap)
+        public Tileset(int tileWidth, int tileHeight, string bitmapPath)
         {
+            Bitmap bitmap;
+            try
+            {
+                bitmap = new Bitmap(bitmapPath);
+            }
+            catch (Exception e)
+            {
+                Logger.bw.ReportProgress(1, "Can't create Bitmap from " + bitmapPath + ": " + e.Message);
+                return;
+            }
+
+            int width = bitmap.Width;
+            int height = bitmap.Height;
             tiles = new Tile[(width / tileWidth) * (height / tileHeight)];
             byte[] tilesetArray = new byte[width * height * 4];
             int xParts = tileWidth / 32;
@@ -37,13 +51,13 @@ namespace cartographer
             int i = 0;
 
             Rectangle rect = new Rectangle(0, 0, width, height);
-            BitmapData bmpData = fullBitmap.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            BitmapData bmpData = bitmap.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             Marshal.Copy(bmpData.Scan0, tilesetArray, 0, width * height * 4);
-            fullBitmap.UnlockBits(bmpData);
+            bitmap.UnlockBits(bmpData);
 
-            for (int h = 0; h < height; h += tileHeight)
+            for (int h = 0; h < height - tileHeight + 1; h += tileHeight)
             {
-                for (int w = 0; w < width * 4; w += tileWidth * 4)
+                for (int w = 0; w < (width - tileWidth + 1) * 4; w += tileWidth * 4)
                 {
                     byte[,][] tileMatrix = new byte[xParts, yParts][];
                     for (int y = 0; y < yParts; y++)
@@ -64,6 +78,8 @@ namespace cartographer
                     tiles[i++] = new Tile(tileMatrix, xParts, yParts);
                 }
             }
+            bitmap.Dispose();
+            bitmap = null;
         }
     }
 }

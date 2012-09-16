@@ -118,6 +118,8 @@ namespace cartographer
                         }
                         current = next;
                     }
+                    if (current == root)
+                        continue;
 
                     int r = 0, g = 0, b = 0;
                     if (!current.hasColor)
