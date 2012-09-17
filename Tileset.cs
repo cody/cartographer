@@ -28,9 +28,14 @@ namespace cartographer
     class Tileset
     {
         public Tile[] tiles { get; private set; }
+        public int tileWidth { get; private set; }
+        public int tileHeight { get; private set; }
 
         public Tileset(int tileWidth, int tileHeight, string bitmapPath)
         {
+            this.tileWidth = tileWidth;
+            this.tileHeight = tileHeight;
+
             Bitmap bitmap;
             try
             {

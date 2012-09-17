@@ -192,14 +192,9 @@ namespace cartographer
                     }
                     else if (imageElement != null) // internal tileset
                     {
-                        key = imageElement.Attribute("source").Value;
-                        if (!tilesets.TryGetValue(key, out tileset))
-                        {
-                            tileset = readTileset(child, Repo.pathMaps);
-                            if (tileset == null)
-                                return null;
-                            tilesets.Add(key, tileset);
-                        }
+                        tileset = readTileset(child, Repo.pathMaps);
+                        if (tileset == null)
+                            return null;
                     }
                     else
                     {
@@ -297,11 +292,12 @@ namespace cartographer
             return map;
         }
 
-        private static Tileset readTileset(XElement xml, string partentPath)
+        private static Tileset readTileset(XElement xml, string parentPath)
         {
             int tilewidth;
             int tileheight;
             string source;
+            Tileset tileset;
 
             try
             {
@@ -329,8 +325,14 @@ namespace cartographer
                     return null;
                 }
 
-                Tileset tileset = new Tileset(tileWidth: tilewidth, tileHeight: tileheight,
-                                              bitmapPath: Path.Combine(partentPath, source));
+                string key = source + "-" + tilewidth + "x" + tileheight;
+                if (!tilesets.TryGetValue(key, out tileset))
+                {
+                    tileset = new Tileset(tileWidth: tilewidth, tileHeight: tileheight,
+                                                  bitmapPath: Path.Combine(parentPath, source));
+
+                    tilesets.Add(key, tileset);
+                }
 
                 return tileset;
             }
