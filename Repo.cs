@@ -20,12 +20,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using ComponentAce.Compression.Libs.zlib;
 
 namespace cartographer
 {
@@ -254,31 +254,54 @@ namespace cartographer
                     }
 
                     string dataString = data.Value;
-
-                    if (encoding == "base64" && compression == "gzip")
+                    if (encoding == "csv" && compression == "")
                     {
-                        byte[] compressed = System.Convert.FromBase64String(dataString);
-                        var compressedStream = new MemoryStream(compressed);
-                        var decompressedStream = new GZipStream(compressedStream, CompressionMode.Decompress);
-
-                        for (int y = 0; y < heightLayer; y++)
+                        using (Stream numberStream = new MemoryStream())
                         {
-                            for (int x = 0; x < widthLayer; x++)
+                            foreach (string s in Regex.Split(dataString, ","))
                             {
-                                byte[] buffer = new byte[4];
-                                decompressedStream.Read(buffer, 0, 4);
-                                uint number = BitConverter.ToUInt32(buffer, 0);
-
-                                if (number == 0 || number > 0x20000000)
-                                    continue;
-                                var order = map.tilesetList.Last(n => n.Key <= number);
-                                Tile tile = order.Value.tiles[number - order.Key];
-                                if (tile == null)
+                                uint number;
+                                try
                                 {
-                                    Logger.bw.ReportProgress(1, "Layer has invalid tile.");
+                                    number = uint.Parse(s, System.Globalization.NumberStyles.Integer);
+                                }
+                                catch (Exception e)
+                                {
+                                    Logger.bw.ReportProgress(1, "In Layer \"" + name + "\" can't parse number \"" + s + "\". "
+                                                 + e.Message);
                                     return null;
                                 }
-                                tile.addToLayer(map.layers, x, y);
+                                byte[] ba = BitConverter.GetBytes(number);
+                                numberStream.Write(ba, 0, 4);
+                            }
+                            numberStream.Position = 0;
+                            if (!readLayer(map, widthLayer, heightLayer, numberStream))
+                                return null;
+                        }
+                    }
+                    else if (encoding == "base64" && compression == "gzip")
+                    {
+                        byte[] compressed = System.Convert.FromBase64String(dataString);
+                        using (var compressedStream = new MemoryStream(compressed))
+                        using (var decompressedStream = new GZipStream(compressedStream, CompressionMode.Decompress))
+                        {
+                            if (!readLayer(map, widthLayer, heightLayer, decompressedStream))
+                                return null;
+                        }
+                    }
+                    else if (encoding == "base64" && compression == "zlib")
+                    {
+                        byte[] compressed = System.Convert.FromBase64String(dataString);
+                        using (MemoryStream output = new MemoryStream())
+                        using (var compressedStream = new MemoryStream(compressed))
+                        using (var zStream = new ZOutputStream(output))
+                        {
+                            CopyStream(compressedStream, zStream);
+                            byte[] array = output.ToArray();
+                            using (MemoryStream decompressedStream = new MemoryStream(array))
+                            {
+                                if (!readLayer(map, widthLayer, heightLayer, decompressedStream))
+                                    return null;
                             }
                         }
                     }
@@ -290,6 +313,53 @@ namespace cartographer
                 }
             }
             return map;
+        }
+
+        public static void CopyStream(Stream input, Stream output)
+        {
+            byte[] buffer = new byte[2000];
+            int len;
+            while ((len = input.Read(buffer, 0, 2000)) > 0)
+            {
+                output.Write(buffer, 0, len);
+            }
+            output.Flush();
+        }
+
+        private static bool readLayer(Map map, int widthLayer, int heightLayer, Stream input)
+        {
+            for (int y = 0; y < heightLayer; y++)
+            {
+                for (int x = 0; x < widthLayer; x++)
+                {
+                    byte[] buffer = new byte[4];
+                    input.Read(buffer, 0, 4);
+                    uint number = BitConverter.ToUInt32(buffer, 0);
+
+                    if (number == 0 || number > 0x20000000)
+                        continue;
+                    var order = map.tilesetList.Last(n => n.Key <= number);
+                    Tile tile;
+                    try
+                    {
+                        tile = order.Value.tiles[number - order.Key];
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.bw.ReportProgress(1, "Don't have tile number " + number +
+                                                    " in tileset with firstgid " + order.Key
+                                                    + ". " + e.Message);
+                        return false;
+                    }
+                    if (tile == null)
+                    {
+                        Logger.bw.ReportProgress(1, "Layer has invalid tile.");
+                        return false;
+                    }
+                    tile.addToLayer(map.layers, x, y);
+                }
+            }
+            return true;
         }
 
         private static Tileset readTileset(XElement xml, string parentPath)

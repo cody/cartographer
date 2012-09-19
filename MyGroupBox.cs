@@ -68,6 +68,7 @@ namespace cartographer
                                                 : Math.Max(map.minimap.Height, map.oldMinimap.Height);
             picbox.MinimumSize = new Size(width, height);
             picbox.AutoSize = true;
+            picbox.ImageAlign = ContentAlignment.TopLeft;
             if (map.diffMinimap == null)
                 picbox.Text = map.diffText;
             else

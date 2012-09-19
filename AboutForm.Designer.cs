@@ -28,18 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
             this.button1 = new System.Windows.Forms.Button();
             this.labelName = new System.Windows.Forms.Label();
             this.labelVersion = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.labelCopyright = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.zlibLicense = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(201, 224);
+            this.button1.Location = new System.Drawing.Point(207, 234);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -50,7 +53,7 @@
             // 
             this.labelName.AutoSize = true;
             this.labelName.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelName.Location = new System.Drawing.Point(12, 16);
+            this.labelName.Location = new System.Drawing.Point(11, 9);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(132, 24);
             this.labelName.TabIndex = 1;
@@ -60,7 +63,7 @@
             // labelVersion
             // 
             this.labelVersion.AutoSize = true;
-            this.labelVersion.Location = new System.Drawing.Point(143, 24);
+            this.labelVersion.Location = new System.Drawing.Point(143, 17);
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(42, 13);
             this.labelVersion.TabIndex = 2;
@@ -69,7 +72,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 79);
+            this.label1.Location = new System.Drawing.Point(13, 43);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(269, 13);
             this.label1.TabIndex = 3;
@@ -78,26 +81,48 @@
             // labelCopyright
             // 
             this.labelCopyright.AutoSize = true;
-            this.labelCopyright.Location = new System.Drawing.Point(12, 156);
+            this.labelCopyright.Location = new System.Drawing.Point(13, 71);
             this.labelCopyright.Name = "labelCopyright";
-            this.labelCopyright.Size = new System.Drawing.Size(173, 13);
+            this.labelCopyright.Size = new System.Drawing.Size(176, 13);
             this.labelCopyright.TabIndex = 4;
-            this.labelCopyright.Text = "Copyright 2012 Stefan Dombrowski";
+            this.labelCopyright.Text = "Copyright 2012, Stefan Dombrowski";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 169);
+            this.label3.Location = new System.Drawing.Point(13, 84);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(83, 13);
             this.label3.TabIndex = 5;
             this.label3.Text = "License GPL v2";
+            // 
+            // zlibLicense
+            // 
+            this.zlibLicense.Location = new System.Drawing.Point(12, 130);
+            this.zlibLicense.Multiline = true;
+            this.zlibLicense.Name = "zlibLicense";
+            this.zlibLicense.ReadOnly = true;
+            this.zlibLicense.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.zlibLicense.Size = new System.Drawing.Size(270, 98);
+            this.zlibLicense.TabIndex = 6;
+            this.zlibLicense.Text = resources.GetString("zlibLicense.Text");
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 114);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(142, 13);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "License for zlib compression:";
             // 
             // AboutForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(288, 259);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.zlibLicense);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.labelCopyright);
             this.Controls.Add(this.label1);
@@ -125,5 +150,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelCopyright;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox zlibLicense;
+        private System.Windows.Forms.Label label2;
     }
 }
