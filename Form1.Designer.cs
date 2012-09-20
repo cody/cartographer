@@ -192,7 +192,7 @@
             this.textBoxRegex.Name = "textBoxRegex";
             this.textBoxRegex.Size = new System.Drawing.Size(144, 20);
             this.textBoxRegex.TabIndex = 2;
-            this.textBoxRegex.Text = "001-";
+            this.textBoxRegex.Text = "-[^2]";
             this.textBoxRegex.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxRegex_KeyPress);
             // 
             // runButton

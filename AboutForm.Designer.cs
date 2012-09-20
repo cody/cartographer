@@ -46,7 +46,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
-            this.button1.Text = "&OK";
+            this.button1.Text = "OK";
             this.button1.UseVisualStyleBackColor = true;
             // 
             // labelName
@@ -105,6 +105,7 @@
             this.zlibLicense.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.zlibLicense.Size = new System.Drawing.Size(270, 98);
             this.zlibLicense.TabIndex = 6;
+            this.zlibLicense.TabStop = false;
             this.zlibLicense.Text = resources.GetString("zlibLicense.Text");
             // 
             // label2

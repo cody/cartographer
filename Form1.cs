@@ -170,7 +170,11 @@ namespace cartographer
         private void Form1_DragDrop(object sender, DragEventArgs e)
         {
             string[] data = (string[]) e.Data.GetData(DataFormats.FileDrop);
-            Repo.readPathXml(data[0]);
+
+            if (data.Length == 1)
+                Repo.readPathXml(data[0]);
+            else if (data.Length > 1)
+                Logger.error("Too many items dropped.");
         }
 
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
